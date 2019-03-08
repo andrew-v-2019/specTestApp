@@ -10,44 +10,20 @@ using specTestApp.Data;
 namespace specTestApp.Web.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
-        public AccountController()
+       
+        public AccountController():base()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager ):base(userManager, signInManager)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
 
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+       
 
         //
         // GET: /Account/Login
@@ -69,9 +45,6 @@ namespace specTestApp.Web.Controllers
             {
                 return View(model);
             }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -108,13 +81,14 @@ namespace specTestApp.Web.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                
+
                 if (result.Succeeded)
                 {
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = GetCallbackUrl(user.Id, code);
                     var emailText = GetConfirmationEmail(callbackUrl);
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты", emailText);
+                    UserManager.AddToRole(user.Id, "Client");
                     return View("DisplayEmail");
                 }
                 AddErrors(result);

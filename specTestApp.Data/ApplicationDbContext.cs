@@ -16,19 +16,6 @@ namespace specTestApp.Data
             return new ApplicationDbContext();
         }
 
-       
-
-        private void CreateRoles()
-        {
-            var manager = Roles.Add(new IdentityRole()
-            {
-                Name = "Manager"
-            });
-            var cliend = Roles.Add(new IdentityRole()
-            {
-                Name = "Client"
-            });
-        }
     }
 
 

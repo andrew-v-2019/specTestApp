@@ -5,8 +5,22 @@
 <div class="jumbotron">
     <h1>УЦ Специалист</h1>
     <p class="lead">Tестовое задание</p>
+    @if (!Request.IsAuthenticated)
+    {
         <a href="/Account/Register" class="btn btn-primary">Регистрация</a>
         <a href="/Account/Login" class="btn btn-default">Войти</a>
+    }
+    else
+    {
+        if (User.IsInRole("Client"))
+        {
+            <a class="btn btn-lg btn-success" href="/requests/create">Создать заявку</a>
+        }
+        if (User.IsInRole("Manager"))
+        {
+            <a class="btn btn-lg btn-success" href="/requests">Создать заявку</a>
+        }
+    }
 </div>
 
 <div class="row">

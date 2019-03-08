@@ -9,7 +9,7 @@
 
 </head>
 <body style="background: #4ca1d7">
-    <div class="navbar navbar-inverse  navbar-fixed-top"     >
+    <div class="navbar navbar-inverse  navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -19,6 +19,19 @@
                 </button>
                 @Html.ActionLink("Главная страница", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+            @if (Request.IsAuthenticated)
+            {
+                <ul class="nav navbar-nav">
+                    @if (User.IsInRole("Client"))
+                    {
+                       <li><a href="/requests/create">Создать заявку</a></li>
+                    }
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <li><a href="/requests">Заявки</a></li>
+                    }
+                </ul>
+            }
             <div class="navbar-collapse collapse">
                 @Html.Partial("_LoginPartial")
             </div>
