@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Список заявок";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Тема</th>
+                        <th>Сообщение</th>
+                        <th>Имя клиента</th>
+                        <th>Почта клиента</th>
+                        <th>Файл</th>
+                        <th>Время создания</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td></td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td></td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td></td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            var t = $('.table');
+
+            var jqxhr = $.get("./api/RequestsApi", function (data) {
+                debugger;
+            })
+                .fail(function (data) { debugger; });
+        });
+
+
+
+
+    </script>
+}

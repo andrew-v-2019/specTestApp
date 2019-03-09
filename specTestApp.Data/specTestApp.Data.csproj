@@ -76,8 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
-    <Compile Include="ApplicationUser.cs" />
+    <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializer.cs" />
+    <Compile Include="Entities\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -29,15 +29,18 @@ namespace specTestApp.Data
 
             ApplicationUser admin = new ApplicationUser();
             userManager.UserLockoutEnabledByDefault = false;
-            admin.Email = "admin";
-            admin.UserName = "admin";
+            admin.Email = "admin@admin.com";
+            admin.UserName = "admin@admin.com";
+            admin.LockoutEnabled = false;
+            admin.EmailConfirmed = true;
 
-           var identityResult =  userManager.Create(admin, "admin");
+
+            var identityResult = userManager.Create(admin, "admin");
             if (identityResult.Succeeded)
             {
                 userManager.AddToRole(admin.Id, "Manager");
             }
-            
+
             base.Seed(context);
         }
     }

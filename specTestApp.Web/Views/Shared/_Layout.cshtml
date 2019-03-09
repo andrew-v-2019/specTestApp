@@ -24,11 +24,11 @@
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole("Client"))
                     {
-                       <li><a href="/requests/create">Создать заявку</a></li>
+                        <li><a href="/requests/create">Создать заявку</a></li>
                     }
                     @if (User.IsInRole("Manager"))
                     {
-                        <li><a href="/requests">Заявки</a></li>
+                        <li><a href="/requests/RequestsList">Заявки</a></li>
                     }
                 </ul>
             }

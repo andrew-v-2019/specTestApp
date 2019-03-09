@@ -16,7 +16,8 @@ namespace specTestApp.Web.Models
         [StringLength(5000, ErrorMessage = "Сообщение слишком длинное")]
         public string Message { get; set; }
 
-        public bool EmailConfirmed { get; set; }
+        public bool DenyCreation { get; set; }
+        public string DenyCreationReason { get; set; }
 
         public HttpPostedFileBase File { get; set; }
     }

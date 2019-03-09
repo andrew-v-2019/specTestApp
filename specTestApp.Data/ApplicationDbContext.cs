@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using specTestApp.Data.Entities;
 using System.Data.Entity;
 
 namespace specTestApp.Data
@@ -15,6 +15,8 @@ namespace specTestApp.Data
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Request> Requests { get; set; }
 
     }
 
