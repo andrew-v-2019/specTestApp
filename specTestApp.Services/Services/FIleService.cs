@@ -11,11 +11,6 @@ namespace specTestApp.Services
     {
         private string fileContainer = "Files";
 
-        public FileService()
-        {
-
-        }
-
         private void CreateDirectory(string folderOnServer)
         {
             var di = new DirectoryInfo(folderOnServer);
@@ -54,7 +49,7 @@ namespace specTestApp.Services
 
                 var sintethicFileName = GetSintethicFileName(file);
 
-                var fullFilePath = folderOnServer + sintethicFileName;
+                var fullFilePath = folderOnServer + "\\" + sintethicFileName;
 
                 file.SaveAs(fullFilePath);
                 result.FileName = sintethicFileName;
