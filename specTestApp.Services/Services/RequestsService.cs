@@ -2,7 +2,6 @@
 using specTestApp.Data.Entities;
 using specTestApp.Services.Interfaces;
 using specTestApp.ViewModels;
-using specTestApp.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -26,11 +25,11 @@ namespace specTestApp.Services.Services
                 {
                     query = query.Where(x => !x.IsDeleted).Select(x => x);
                 }
-                query = query.Skip(model.skip).Take(model.take);
+                query = query.Skip(model.Skip).Take(model.Take);
 
                 var list = await query.Select(x => x).ToListAsync();
 
-                var models = list.Select(x => Project(x)).ToList();
+                var models = list.Select(Project).ToList();
 
                 var usersIds = models.Select(x => x.UserId).ToList();
                 var users = await context.Users.Where(x => usersIds.Contains(x.Id))
@@ -41,7 +40,7 @@ namespace specTestApp.Services.Services
             }
         }
 
-        private void DecorateModel(RequestListItemViewModel model, IDictionary<string, string> users)
+        private static void DecorateModel(RequestListItemViewModel model, IDictionary<string, string> users)
         {
             var modelUserId = model.UserId;
 
@@ -53,7 +52,7 @@ namespace specTestApp.Services.Services
             model.CreationDateString = model.CreationDate.ToString("g");
         }
 
-        private RequestListItemViewModel Project(Request request)
+        private static RequestListItemViewModel Project(Request request)
         {
             var model = new RequestListItemViewModel()
             {
@@ -85,22 +84,6 @@ namespace specTestApp.Services.Services
             }
         }
 
-        public async System.Threading.Tasks.Task ActivateRequestAsync(int requestId)
-        {
-            using (var context = new ApplicationDbContext())
-            {
-                var request = await context.Requests.FirstOrDefaultAsync(x => x.RequestId == requestId);
-
-                if (request == null)
-                {
-                    return;
-                }
-
-                request.IsDeleted = false;
-                await context.SaveChangesAsync();
-            }
-        }
-
         public async System.Threading.Tasks.Task<int?> GetHoursFromLastRequestForUserAsync(string userId)
         {
             using (var context = new ApplicationDbContext())
@@ -121,7 +104,7 @@ namespace specTestApp.Services.Services
             }
         }
 
-        private Request Project(CreateRequestViewModel model, FileSaveResult file, string currentUserId)
+        private static Request Project(CreateRequestViewModel model, FileSaveResult file, string currentUserId)
         {
             var request = new Request();
             request.Caption = model.Caption.Trim();

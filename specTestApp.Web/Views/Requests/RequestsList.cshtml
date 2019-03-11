@@ -1,179 +1,166 @@
 ﻿
 @{
-    ViewBag.Title = "Список заявок";
+  ViewBag.Title = "Список заявок";
 }
-
 <h2>@ViewBag.Title</h2>
-
 <div class="row">
-    <div class="col-md-12">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover table-sm text-center" style="background-color:white;">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Тема</th>
-                        <th>Сообщение</th>
-                        <th>Имя клиента</th>
-                        <th>Почта клиента</th>
-                        <th>Файл</th>
-                        <th>Время создания</th>
-                        <th class="text-center">Действия</th>
-                    </tr>
-                </thead>
-                <tbody id="container"></tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="8" class="text-center">
-                            <button class="btn btn-sm btn-default" id="loadMoreButton">
-                                Загрузить ещё...
-                            </button>
-                            <span style="display:none" id="spinner">
-                                <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
-                                <small class="text-muted">загрузка...</small>
-                            </span>
-                        </th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover table-sm text-center" style="background-color:white;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Тема</th>
+            <th>Сообщение</th>
+            <th>Имя клиента</th>
+            <th>Почта клиента</th>
+            <th>Файл</th>
+            <th>Время создания</th>
+            <th class="text-center">Действия</th>
+          </tr>
+        </thead>
+        <tbody id="container"></tbody>
+        <tfoot>
+          <tr>
+            <th colspan="8" class="text-center">
+              <button class="btn btn-sm btn-default" id="loadMoreButton">
+                Загрузить ещё...
+              </button>
+              <span style="display:none" id="spinner">
+                <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
+                <small class="text-muted">загрузка...</small>
+              </span>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
+  </div>
 </div>
-
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    $(document).ready(function () {
+      var itemsOnPage = 10;
+      var skip = 0;
+      var showInActive = false;
+      var baseUrl = "/api/requestsapi/get";
 
-    <script>
-        $(document).ready(function () {
-            var t = $('.table');
+      function showLoadingIndicator() {
+        $('#spinner').css('display', 'inline');
+        $('#loadMoreButton').css('display', 'none');
+      }
 
-            // http://localhost:60326/api/requestsapi/get?take=10&skip=0
+      function hideLoadingIndicator() {
+        $('#spinner').css('display', 'none');
+        $('#loadMoreButton').css('display', 'inline');
+      }
 
-            var itemsOnPage = 10;
-            var skip = 0;
-            var showInActive = false;
-            var baseUrl = "/api/requestsapi/get";
+      $("#loadMoreButton").click(function () {
+        load();
+      });
 
+      function load() {
+        var url = formatRoute();
+        showLoadingIndicator();
+        var promise = $.get(url, function (data) {
+            formatTable(data);
+            skip = skip + itemsOnPage;
+            hideLoadingIndicator();
+          })
+          .fail(function () {
+            hideLoadingIndicator();
+          });
+      }
 
-            function showLoadingIndicator() {
-                $('#spinner').css('display', 'inline');
-                $('#loadMoreButton').css('display', 'none');
-            }
+      function formatTable(data) {
+        if (!data) {
+          return;
+        }
 
-            function hideLoadingIndicator() {
-                $('#spinner').css('display', 'none');
-                $('#loadMoreButton').css('display', 'inline');
-            }
-
-
-            $("#loadMoreButton").click(function () {
-                load();
-            });
-
-
-            function load() {
-                var url = formatRoute();
-                showLoadingIndicator();
-                var promise = $.get(url, function (data) {
-                    formatTable(data);
-                    skip = skip + itemsOnPage;
-                    hideLoadingIndicator();
-                })
-                    .fail(function (data) {
-                        hideLoadingIndicator();
-                    });
-            }
-
-            function formatTable(data) {
-                if (!data) {
-                    return;
-                }
-
-                data.forEach(function (item) {
-                    var tr = formatTableRow(item);
-                    $('#container').append(tr);
-                    $('#deactivate-' + item.RequestId).click(function (e) {
-                        deactivate(e.currentTarget);
-                    });
-                });
-            }
-
-
-            function deactivate(el) {
-                var data = $(el).data();
-                if (!data) {
-                    return;
-                }
-                var requestId = data.val;
-                var deleteUrl = "/api/requestsapi/delete/" + requestId;
-
-                lockRemoveButton(el);
-
-                $.ajax({
-                    type: "PUT",
-                    url: deleteUrl,
-                    success: function () {
-                        var tr = $(el).closest('tr');
-                        tr.fadeOut(700, function () { $(this).remove(); });
-                    }
-                });
-            }
-
-            function lockRemoveButton(el) {
-                $(el).attr('disabled', 'disabled');
-                var fa = $(el).find('.fa-ban');
-
-                if (fa) {
-                    $(fa).removeClass('fa-ban');
-                    $(fa).addClass('fa-refresh');
-                    $(fa).addClass('fa-spin');
-                }
-            }
-
-
-            function formatTableRow(item) {
-                var tr = '<tr>'
-                tr = tr + formatTableCell(item.RequestId);
-                tr = tr + formatTableCell(item.Caption);
-                tr = tr + formatTableCell(item.Message);
-                tr = tr + formatTableCell(item.UserName);
-                tr = tr + formatTableCell(item.UserName);
-                tr = tr + formatFileUrl(item.FileUrl, item.OrigFileName);
-                tr = tr + formatTableCell(item.CreationDateString);
-                tr = tr + formatActionButton(item.RequestId);
-                tr = tr + '</tr>';
-                return tr;
-            }
-
-            function formatActionButton(id) {
-                var b = '<button class="btn btn-sm btn-default" id="deactivate-' + id + '" data-val="' + id + '"> <i class="fa fa-ban fa-fw" aria-hidden="true"></i></button>';
-                return '<td>' + b + '</td>';
-            }
-
-            function formatTableCell(cellData) {
-                return '<td>' + cellData + '</td>';
-            }
-
-            function formatFileUrl(cellData, origFileName) {
-                if (!cellData) {
-                    return '<td></td>'
-                }
-                var a = '<a'
-                a = a + ' href=/' + cellData + '>';
-                a = a + origFileName + '<a/>';
-                return '<td>' + a + '</td>'
-            }
-
-            function formatRoute() {
-                var route = baseUrl + '/' + itemsOnPage + '/' + skip + '/' + showInActive;
-                return route;
-            }
-
-            load();
+        data.forEach(function (item) {
+          var tr = formatTableRow(item);
+          $('#container').append(tr);
+          $('#deactivate-' + item.RequestId).click(function (e) {
+            deactivate(e.currentTarget);
+          });
         });
+      }
 
+      function deactivate(el) {
+        var data = $(el).data();
+        if (!data) {
+          return;
+        }
+        var requestId = data.val;
+        var deleteUrl = "/api/requestsapi/delete/" + requestId;
 
+        lockRemoveButton(el);
 
+        $.ajax({
+          type: "PUT",
+          url: deleteUrl,
+          success: function () {
+            var tr = $(el).closest('tr');
+            tr.fadeOut(700, function () {
+              $(this).remove();
+            });
+          }
+        });
+      }
 
-    </script>
+      function lockRemoveButton(el) {
+        $(el).attr('disabled', 'disabled');
+        var fa = $(el).find('.fa-ban');
+
+        if (fa) {
+          $(fa).removeClass('fa-ban');
+          $(fa).addClass('fa-refresh');
+          $(fa).addClass('fa-spin');
+        }
+      }
+
+      function formatTableRow(item) {
+        var tr = '<tr>';
+        tr = tr + formatTableCell(item.RequestId);
+        tr = tr + formatTableCell(item.Caption);
+        tr = tr + formatTableCell(item.Message);
+        tr = tr + formatTableCell(item.UserName);
+        tr = tr + formatTableCell(item.UserName);
+        tr = tr + formatFileUrl(item.FileUrl, item.OrigFileName);
+        tr = tr + formatTableCell(item.CreationDateString);
+        tr = tr + formatActionButton(item.RequestId);
+        tr = tr + '</tr>';
+        return tr;
+      }
+
+      function formatActionButton(id) {
+        var b = '<button class="btn btn-sm btn-default" id="deactivate-' + id + '" data-val="' + id
+          + '"> <i class="fa fa-ban fa-fw" aria-hidden="true"></i></button>';
+        return '<td>' + b + '</td>';
+      }
+
+      function formatTableCell(cellData) {
+        return '<td>' + cellData + '</td>';
+      }
+
+      function formatFileUrl(cellData, origFileName) {
+        if (!cellData) {
+          return '<td></td>';
+        }
+        var a = '<a';
+        a = a + ' href=/' + cellData + '>';
+        a = a + origFileName + '<a/>';
+        return '<td>' + a + '</td>';
+      }
+
+      function formatRoute() {
+        var route = baseUrl + '/' + itemsOnPage + '/' + skip + '/' + showInActive;
+        return route;
+      }
+
+      load();
+    });
+
+  </script>
 }

@@ -1,4 +1,4 @@
-﻿namespace specTestApp.Services
+﻿namespace specTestApp.Services.Interfaces
 {
     public interface IConfigurationProvider
     {

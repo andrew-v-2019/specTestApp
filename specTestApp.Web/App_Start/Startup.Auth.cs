@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Owin;
 using specTestApp.Data;
 using Microsoft.AspNet.Identity.EntityFramework;
+using specTestApp.Data.Entities;
 
 namespace specTestApp.Web
 {

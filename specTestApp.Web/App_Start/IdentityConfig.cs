@@ -9,6 +9,8 @@ using Microsoft.Owin.Security;
 using specTestApp.Web.Infrastructure;
 using specTestApp.Services;
 using specTestApp.Data;
+using specTestApp.Data.Entities;
+using specTestApp.Services.Services;
 
 
 namespace specTestApp.Web

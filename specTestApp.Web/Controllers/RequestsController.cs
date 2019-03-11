@@ -1,9 +1,8 @@
-﻿using specTestApp.Services;
-using specTestApp.Services.Interfaces;
+﻿using specTestApp.Services.Interfaces;
 using specTestApp.Services.Services;
-using specTestApp.Web.Models;
 using System;
 using System.Web.Mvc;
+using specTestApp.ViewModels;
 using specTestApp.Web.Infrastructure;
 
 namespace specTestApp.Web.Controllers

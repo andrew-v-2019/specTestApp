@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
-using specTestApp.Services;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using specTestApp.Services.Interfaces;
 
 namespace specTestApp.Web.Infrastructure
 {

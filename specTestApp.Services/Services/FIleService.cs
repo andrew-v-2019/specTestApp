@@ -1,17 +1,17 @@
-﻿using System.Web;
-using System.IO;
-using specTestApp.Web.Models;
-using System;
-using specTestApp.ViewModels;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Web;
+using specTestApp.Services.Interfaces;
+using specTestApp.ViewModels;
 
-namespace specTestApp.Services
+namespace specTestApp.Services.Services
 {
     public class FileService : IFileService
     {
-        private string fileContainer = "Files";
+        private const string FileContainer = "Files";
 
-        private void CreateDirectory(string folderOnServer)
+        private static void CreateDirectory(string folderOnServer)
         {
             var di = new DirectoryInfo(folderOnServer);
 
@@ -25,40 +25,33 @@ namespace specTestApp.Services
         {
             foreach (var item in model)
             {
-                var url = serverFolder + fileContainer + '\\' + item.FileUrl;
-                if (File.Exists(url))
-                {
-                    item.FileUrl = $"{fileContainer}/{item.FileUrl}";
-                }
-                else
-                {
-                    item.FileUrl = string.Empty;
-                }
-
+                var url = serverFolder + FileContainer + '\\' + item.FileUrl;
+                item.FileUrl = File.Exists(url) ? $"{FileContainer}/{item.FileUrl}" : string.Empty;
             }
         }
 
         public FileSaveResult SaveFile(HttpPostedFileBase file, string serverPath)
         {
             var result = new FileSaveResult();
-            if (file != null)
+            if (file == null)
             {
-                var folderOnServer = serverPath + fileContainer;
-
-                CreateDirectory(folderOnServer);
-
-                var sintethicFileName = GetSintethicFileName(file);
-
-                var fullFilePath = folderOnServer + "\\" + sintethicFileName;
-
-                file.SaveAs(fullFilePath);
-                result.FileName = sintethicFileName;
-                result.OrigFileName = file.FileName;
+                return result;
             }
+            var folderOnServer = serverPath + FileContainer;
+
+            CreateDirectory(folderOnServer);
+
+            var sintethicFileName = GetSintethicFileName(file);
+
+            var fullFilePath = folderOnServer + "\\" + sintethicFileName;
+
+            file.SaveAs(fullFilePath);
+            result.FileName = sintethicFileName;
+            result.OrigFileName = file.FileName;
             return result;
         }
 
-        private string GetSintethicFileName(HttpPostedFileBase file)
+        private static string GetSintethicFileName(HttpPostedFileBase file)
         {
             var ext = GetExtension(file);
             var sintethicFileName = $"{Guid.NewGuid().ToString()}{ext}";
@@ -66,9 +59,9 @@ namespace specTestApp.Services
         }
 
 
-        private string GetExtension(HttpPostedFileBase file)
+        private static string GetExtension(HttpPostedFileBase file)
         {
-            string ext = Path.GetExtension(file.FileName);
+            var ext = Path.GetExtension(file.FileName);
             return ext;
         }
     }

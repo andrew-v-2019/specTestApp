@@ -1,4 +1,4 @@
-﻿namespace specTestApp.Web.Models
+﻿namespace specTestApp.ViewModels
 {
     public class FileSaveResult
     {

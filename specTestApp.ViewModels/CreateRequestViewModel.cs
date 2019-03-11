@@ -1,8 +1,7 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
 
-namespace specTestApp.Web.Models
+namespace specTestApp.ViewModels
 {
     public class CreateRequestViewModel
     {

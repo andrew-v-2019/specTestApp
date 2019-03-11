@@ -1,9 +1,8 @@
-﻿using specTestApp.ViewModels;
-using specTestApp.Web.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web;
+using specTestApp.ViewModels;
 
-namespace specTestApp.Services
+namespace specTestApp.Services.Interfaces
 {
     public interface IFileService
     {

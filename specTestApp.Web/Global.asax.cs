@@ -21,7 +21,7 @@ namespace specTestApp.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Database.SetInitializer(new DBInitializer());
+            Database.SetInitializer(new DbInitializer());
         }
 
         protected void Application_Error()

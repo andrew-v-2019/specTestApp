@@ -1,5 +1,4 @@
-﻿using specTestApp.Services;
-using specTestApp.Services.Interfaces;
+﻿using specTestApp.Services.Interfaces;
 using specTestApp.Services.Services;
 using specTestApp.ViewModels;
 using System.Collections.Generic;

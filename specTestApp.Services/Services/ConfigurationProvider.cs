@@ -2,8 +2,9 @@
 using System.Configuration;
 using System.Linq;
 using Newtonsoft.Json;
+using specTestApp.Services.Interfaces;
 
-namespace specTestApp.Services
+namespace specTestApp.Services.Services
 {
     public class ConfigurationProvider : IConfigurationProvider
     {
