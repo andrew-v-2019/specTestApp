@@ -2,8 +2,8 @@
 {
     public class FilterViewModel
     {
-        public int Take { get; set; }
-        public int Skip { get; set; }
+        public int take { get; set; }
+        public int skip { get; set; }
         public bool ShowInActive { get; set; }
     }
 }

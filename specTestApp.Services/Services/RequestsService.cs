@@ -17,15 +17,20 @@ namespace specTestApp.Services.Services
         {
             using (var context = new ApplicationDbContext())
             {
-                var query = context.Requests.OrderByDescending(x => x.CreatedDate).Select(x => x);
+                var query = context.Requests
+                    .OrderByDescending(x => x.CreatedDate)
+                    .ThenBy(x => x.RequestId)
+                    .Select(x => x);
 
                 if (!model.ShowInActive)
                 {
                     query = query.Where(x => !x.IsDeleted).Select(x => x);
                 }
-                query = query.Skip(model.Skip).Take(model.Take);
+                query = query.Skip(model.skip).Take(model.take);
 
-                var models = await query.Select(x => Project(x)).ToListAsync();
+                var list = await query.Select(x => x).ToListAsync();
+
+                var models = list.Select(x => Project(x)).ToList();
 
                 var usersIds = models.Select(x => x.UserId).ToList();
                 var users = await context.Users.Where(x => usersIds.Contains(x.Id))
@@ -59,6 +64,7 @@ namespace specTestApp.Services.Services
                 OrigFileName = request.OriginalFileName,
                 FileUrl = request.FileName,
                 UserId = request.CreatedBy,
+                IsDeleted = request.IsDeleted
             };
             return model;
         }

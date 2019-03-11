@@ -8,6 +8,6 @@ namespace specTestApp.Services
     public interface IFileService
     {
         FileSaveResult SaveFile(HttpPostedFileBase file, string serverPath);
-        void DecorateModelWithFileUrls(List<RequestListItemViewModel> model);
+        void DecorateModelWithFileUrls(List<RequestListItemViewModel> model, string serverFolder);
     }
 }

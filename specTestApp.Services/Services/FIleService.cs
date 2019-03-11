@@ -26,11 +26,20 @@ namespace specTestApp.Services
             }
         }
 
-        public void DecorateModelWithFileUrls(List<RequestListItemViewModel> model)
+        public void DecorateModelWithFileUrls(List<RequestListItemViewModel> model, string serverFolder)
         {
             foreach (var item in model)
             {
-                item.FileUrl = $"{fileContainer}/{item.FileUrl}";
+                var url = serverFolder + fileContainer + '\\' + item.FileUrl;
+                if (File.Exists(url))
+                {
+                    item.FileUrl = $"{fileContainer}/{item.FileUrl}";
+                }
+                else
+                {
+                    item.FileUrl = string.Empty;
+                }
+
             }
         }
 

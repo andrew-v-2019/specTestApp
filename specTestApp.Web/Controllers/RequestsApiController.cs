@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace specTestApp.Web.Controllers
 {
-    //[Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager")]
     public class RequestsApiController : ApiController
     {
 
@@ -20,28 +20,26 @@ namespace specTestApp.Web.Controllers
             _requestsService = new RequestsService();
         }
 
-
-        // GET: api/RequestsApi
-       // [Route("api/requests/get")]
         [HttpGet]
-        public async System.Threading.Tasks.Task<IEnumerable<RequestListItemViewModel>> Get()
+        public async System.Threading.Tasks.Task<IEnumerable<RequestListItemViewModel>> Get([FromUri]FilterViewModel filter)
         {
-            var filter = new FilterViewModel();
+            
             var items = await _requestsService.GetRequestsAsync(filter);
-            _fileService.DecorateModelWithFileUrls(items);
+            var folder = System.Web.Hosting.HostingEnvironment.MapPath("~/"); 
+            _fileService.DecorateModelWithFileUrls(items, folder);
             return items;
         }
 
-        // PUT: api/RequestsApi/restore/5
-        [HttpPut]
-        public async System.Threading.Tasks.Task RestoreAsync(int id)
-        {
-            await _requestsService.ActivateRequestAsync(id);
-        }
+        //[HttpPut]
+        //[ActionName("restore")]
+        //public async System.Threading.Tasks.Task RestoreAsync(int id)
+        //{
+        //    await _requestsService.ActivateRequestAsync(id);
+        //}
 
         // DELETE: api/RequestsApi/5
-        [HttpDelete]
-        public async System.Threading.Tasks.Task DeleteAsync(int id)
+        [HttpPut]
+        public async System.Threading.Tasks.Task Delete(int id)
         {
             await _requestsService.DeactivateRequestAsync(id);
         }

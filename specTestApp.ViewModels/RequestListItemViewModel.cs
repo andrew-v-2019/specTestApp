@@ -12,6 +12,8 @@ namespace specTestApp.ViewModels
         public string OrigFileName { get; set; }
         public string FileUrl { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public string CreationDateString { get; set; }
