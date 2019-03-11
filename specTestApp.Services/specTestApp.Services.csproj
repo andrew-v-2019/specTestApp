@@ -59,12 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IRequestsService.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Services\ConfigurationProvider.cs" />
     <Compile Include="Services\FIleService.cs" />
     <Compile Include="Interfaces\IConfigurationProvider.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RequestsService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

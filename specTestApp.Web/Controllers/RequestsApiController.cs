@@ -7,12 +7,13 @@ using System.Web.Http;
 
 namespace specTestApp.Web.Controllers
 {
+    [LogException]
     [Authorize(Roles = "Manager")]
     public class RequestsApiController : ApiController
     {
 
-        private IFileService _fileService;
-        private IRequestsService _requestsService;
+        private readonly IFileService _fileService;
+        private readonly IRequestsService _requestsService;
 
         public RequestsApiController()
         {
@@ -23,21 +24,13 @@ namespace specTestApp.Web.Controllers
         [HttpGet]
         public async System.Threading.Tasks.Task<IEnumerable<RequestListItemViewModel>> Get([FromUri]FilterViewModel filter)
         {
-            
+
             var items = await _requestsService.GetRequestsAsync(filter);
-            var folder = System.Web.Hosting.HostingEnvironment.MapPath("~/"); 
+            var folder = System.Web.Hosting.HostingEnvironment.MapPath("~/");
             _fileService.DecorateModelWithFileUrls(items, folder);
             return items;
         }
 
-        //[HttpPut]
-        //[ActionName("restore")]
-        //public async System.Threading.Tasks.Task RestoreAsync(int id)
-        //{
-        //    await _requestsService.ActivateRequestAsync(id);
-        //}
-
-        // DELETE: api/RequestsApi/5
         [HttpPut]
         public async System.Threading.Tasks.Task Delete(int id)
         {

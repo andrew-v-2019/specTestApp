@@ -10,6 +10,7 @@ using specTestApp.Data;
 namespace specTestApp.Web.Controllers
 {
     [Authorize]
+    [LogException]
     public class AccountController : ControllerBase
     {
        
@@ -22,11 +23,6 @@ namespace specTestApp.Web.Controllers
             
         }
 
-
-       
-
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -34,8 +30,6 @@ namespace specTestApp.Web.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -61,20 +55,16 @@ namespace specTestApp.Web.Controllers
             }
         }
 
-                
-        //
-        // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [LogException]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -109,8 +99,6 @@ namespace specTestApp.Web.Controllers
             return text;
         }
 
-        //
-        // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -122,8 +110,6 @@ namespace specTestApp.Web.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
-        // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
@@ -131,7 +117,6 @@ namespace specTestApp.Web.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
-
 
         protected override void Dispose(bool disposing)
         {

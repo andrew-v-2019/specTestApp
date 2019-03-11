@@ -16,7 +16,7 @@ namespace specTestApp.Data
             return new ApplicationDbContext();
         }
 
-        public DbSet<Request> Requests { get; set; }
+        public IDbSet<Request> Requests { get; set; }
 
     }
 
