@@ -1,0 +1,1 @@
+2019-03-11 13:21:31.4592 specTestApp.Web.MvcApplication.Application_Start Info: Application Start  RuntimeMethodInfo.UnsafeInvokeInternal => RuntimeMethodHandle.InvokeMethod => MvcApplication.Application_Start
